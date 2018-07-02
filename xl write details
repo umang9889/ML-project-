@@ -1,0 +1,44 @@
+import xlwt
+workbook = xlwt.Workbook(encoding = 'ascii')
+worksheet = workbook.add_sheet('My Worksheet1')
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+url = 'https://www.flipkart.com/mobiles/pr?sid=tyy%2C4io&otracker=categorytree&page=20'
+page=requests.get(url)
+html=page.content
+soup=BeautifulSoup(html,'html.parser')
+container=soup.find_all('div',class_="_3O0U0u")
+'''print(len(container))'''
+length=len(container)
+for i in range(0,length):
+    con=container[i]
+    name=con.find('div',class_="_3wU53n").get_text()
+    print(name)
+    worksheet.write(i, 0, label = name)
+    price=con.find('div',class_="_1vC4OE _2rQ-NK").get_text()
+    print(price)
+    worksheet.write(i, 1, label = price)
+    rating=con.find('div',class_="hGSR34 _2beYZw").get_text()
+    print(rating)
+    worksheet.write(i, 2, label = rating)
+    randr=con.find('span',class_="_38sUEc").get_text()
+    print(randr)
+    worksheet.write(i, 3, label = randr)
+    specifications=con.find_all('li',class_="tVe95H")
+    if len(specifications)>=5:
+        storage=specifications[0].get_text()
+        print(storage)
+        worksheet.write(i, 4, label = storage)
+        display=specifications[1].get_text()
+        print(display)
+        worksheet.write(i, 5, label = display)
+        camera=specifications[2].get_text()
+        print(camera)
+        worksheet.write(i, 6, label = camera)
+        battery=specifications[3].get_text()
+        print(battery)
+        worksheet.write(i, 7, label = battery)
+        processor=specifications[4].get_text()
+        print(processor)
+        worksheet.write(i, 8, label = processor)
+workbook.save('Excel_Workbook11.xls')
