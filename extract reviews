@@ -1,0 +1,40 @@
+import re
+import requests
+#from urllib.request import urlopen
+from bs4 import BeautifulSoup
+url = 'https://www.flipkart.com/mobiles/pr?sid=tyy%2C4io&otracker=categorytree&page=1'
+page=requests.get(url)
+html=page.content
+soup=BeautifulSoup(html,'html.parser')
+container=soup.find_all('div',class_="_1UoZlX")
+length=len(container)
+linkarray=[]
+for i in range(0,length):
+    con=container[i]
+    link=con.find('a',class_='_31qSD5')
+    linkarray.append(link['href'])
+url1='https://www.flipkart.com'
+for i in range(len(linkarray)):
+    url2=linkarray[i]
+    url3=url1+url2
+    '''print(url3)'''
+    page1=requests.get(url3)
+    html1=page1.content
+    soup1=BeautifulSoup(html1,'html.parser')
+    container1=soup1.find('div',class_='col _39LH-M')
+    link1=container1.find_all("a")
+    s=str(link1[len(link1)-1])
+    l=[]
+    l=re.findall(r'\"(.+?)\"',s)
+    url4=l[0]
+    url5=url1+url4
+    '''print(url5)'''
+    page2=requests.get(url5)
+    html2=page2.content
+    soup2=BeautifulSoup(html2,'html.parser')
+    container2=soup2.find_all('div',class_="col _390CkK")
+    length1=len(container2)
+    for j in range(0,length1):
+        con2=container2[j]
+        reviews=con2.find('p',class_="_2xg6Ul").get_text()
+        print(reviews)
