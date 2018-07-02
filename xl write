@@ -1,0 +1,40 @@
+import xlwt
+workbook = xlwt.Workbook(encoding = 'ascii')
+worksheet = workbook.add_sheet('My Worksheet1')
+
+from urllib.request import urlopen as uReq
+from bs4 import BeautifulSoup as soup
+#import scrapy
+url = 'https://www.flipkart.com/mobiles/pr?sid=tyy%2C4io&otracker=categorytree&page=2'
+uClient = uReq(url)
+html= uClient.read()
+uClient.close()
+page_soup= soup(html,"html.parser")
+containers=page_soup.findAll("div",{"class":"_3O0U0u"})
+print(len(containers))
+'''print(soup.prettify(containers[0]))'''
+for i in range(0,len(containers)):
+    con=containers[i]
+    print(con.div.img["alt"])
+    worksheet.write(i, 0, label = con.div.img["alt"])
+    price=con.findAll("div",{"class":"_1vC4OE _2rQ-NK"})
+    print(price[0].text)
+    worksheet.write(i, 1, label = price[0].text)
+    ratings=con.findAll("div",{"class":"hGSR34 _2beYZw"})
+    print(ratings[0].text)
+    worksheet.write(i, 2, label = ratings[0].text)
+    randr=con.findAll("span",{"class":"_38sUEc"})
+    print(randr[0].text)
+    worksheet.write(i, 3, label = randr[0].text)
+    specifications=con.findAll("li",{"class":"tVe95H"})
+    print(specifications[0].text)
+    worksheet.write(i, 4, label = specifications[0].text)
+    print(specifications[1].text)
+    worksheet.write(i, 5, label = specifications[1].text)
+    print(specifications[2].text)
+    worksheet.write(i, 6, label = specifications[2].text)
+    print(specifications[3].text)
+    worksheet.write(i, 7, label = specifications[3].text)
+    print(specifications[4].text)
+    worksheet.write(i, 8, label = specifications[4].text)
+workbook.save('Excel_Workbook11.xls')
